@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="jquery-3.2.1.min的副本.js"></script>
+  </head>
+  <body>
+      <table border="1" cellspaceing='0' bgcolor='#ABCDEF' width='80%'>
+        <tr>
+          <td>用户名</td>
+          <td><input type="text" name="username" id="username" placeholder="请输入你的用户名"></td>
+        </tr>
+        <tr>
+          <td>邮箱</td>
+          <td><input type="text" name="email" id="email" placeholder="请输入你的邮箱"></td>
+        </tr>
+        <tr>
+          <td>电话</td>
+          <td><input type="text" name="phone" id="phone" placeholder="请输入你的手机电话"></td>
+        </td>
+        <tr>
+          <td colspan='2'><button id="check">发送</button></td>
+        </tr>
+      </table>
+  </body>
+<script>
+$(document).ready(function(){
+  $("#check").click(function(){
+    $.ajax({
+      url:"check.php",
+      type:"POST",
+      dataType:"json",
+      data:{
+        username: $("#username").val(),
+        email: $("#email").val(),
+        phone: $("#phone").val(),
+      },
+      success:function(hint){
+        alert(hint.message);
+       },
+       error: function(xhr) {
+         alert(xhr.responseJSON.message["username"]);
+         alert(xhr.responseJSON.message["email"]);
+         alert(xhr.responseJSON.message["phone"]);
+
+       }
+    })
+  })
+})
+</script>
+</html>

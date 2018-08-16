@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jquery&&ajax</title>
+    <script type="text/javascript" src="jquery-3.2.1.min的副本.js"></script>
+</head>
+<body>
+<form>
+    <label>用户：</label><input type="text" id="t_username" placeholder="请输入"/>
+    <button id="check_username">检测</button><br/>
+    <label>邮箱：</label><input type="text" id="t_email" placeholder="请输入"/>
+    <button id="check_email">检测</button><br/>
+    <label>电话：</label><input type="text" id="t_phone" placeholder="请输入"/>
+    <button id="check_phone">检测</button><br/>
+</form>
+<form>
+    <label>用户：</label><input type="text" id="tt_username" placeholder="请输入"/></br>
+    <label>邮箱：</label><input type="text" id="tt_email" placeholder="请输入"/></br>
+    <label>电话：</label><input type="text" id="tt_phone" placeholder="请输入"/></br>
+    <button id="check_aLL">检测</button><br/>
+</form>
+</body>
+<script>
+    $(function () {
+        // 用户名
+        $("#check_username").click(function(){
+            var str = $("#t_username").val();
+            var ret = /^[a-zA-Z][a-zA-Z0-9_]{5,20}$/;
+            if(ret.test(str)){
+                alert('ok');
+            }else{
+                alert('请输入一个8到20位长的字符串，其中只能包含大小写字母和数字');
+            }
+        });
+        // 邮件
+        $("#check_email").click(function(){
+            var str = $("#t_email").val();
+            var ret = /^[\w-]+(\.[\w-]+)*@[\w-]+\.([\w-]+)+$/;
+            if(ret.test(str)){
+                alert('ok');
+            }else{
+                alert('wrong');
+            }
+        });
+        // 手机
+        $("#check_phone").click(function(){
+            var str = $("#t_phone").val();
+            var ret = /^[\d]{5,20}$/;
+            if(ret.test(str)){
+                alert('ok');
+            }else{
+                alert('wrong');
+            }
+        });
+        $("#check_aLL").click(function () {
+            var str1 = $("#tt_username").val();
+            var str2 = $("#tt_email").val();
+            var str3 = $("#tt_phone").val();
+            var ret1 = /^[a-zA-Z][a-zA-Z0-9_]{5,20}$/;
+            var ret2 = /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/;
+            var ret3 = /^[\d]{11}$/;
+            if (ret1.test(str1) && ret2.test(str2) && ret3.test(str3)) {
+                alert('格式正确');
+            } else {
+                alert('请检查你的输入用户名 邮箱 电话是否输入正确');
+            }
+        });
+    });
+</script>
+</html>

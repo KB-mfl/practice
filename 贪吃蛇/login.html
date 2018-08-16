@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+
+    <link rel="stylesheet" type="text/css" href="login.css"/>
+    <!--<script type="text/javascript" src="login.js"></script>-->
+
+</head>
+
+
+<body>
+<div class="judge" id="judge">
+
+</div>
+<div id="login_frame">
+    <div class="mun2">欢迎来到贪吃蛇小游戏</div>
+    <form>
+        <p><label class="label_input">用户名</label><input type="text" id="username" class="text_field" placeholder="请输入你的用户名"/></p>
+        <p><label class="label_input">密码</label><input type="text" id="password" class="text_field" placeholder="请输入你的密码"/></p>
+        <div id="login_control">
+            <input type="button" id="btn_login" value="登录" onclick="login();"/>
+            <input type="button" id="btn_register" value="注册" onclick="register();"/>
+            <a id="forget_pwd" href="forget_pwd.html">忘记密码？</a>
+        </div>
+    </form>
+</div>
+
+</body>
+<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+<script>
+    function login() {
+        $.ajax({
+            type:"POST",
+            url:"check_login.php",
+            data:{
+                name: $("#username").val(),
+                pwd: $("#password").val(),
+            },
+            dataType:"json",
+            success:function (data) {
+                document.cookie="name=" + document.getElementById("username").value;
+                var div = document.createElement("div");
+                div.className = '';
+                var element=document.getElementById("judge");
+                element.innerHTML = "";
+                div.innerHTML = "登录成功，1秒后进入游戏";
+                element.appendChild(div);
+                setTimeout("location.href='./index.html'",1000);
+            },
+            error:function(jqXHR){
+                // JSON.parse(jqXHR.responseTEXT);
+                var div = document.createElement("div");
+                div.className = '';
+                var element=document.getElementById("judge");
+                element.innerHTML = "";
+                // div.innerHTML = jqXHR.status;
+                div.innerHTML = jqXHR.responseJSON;
+                element.appendChild(div);
+                document.getElementById("username").value='';
+                document.getElementById("password").value='';
+            },
+        });
+    }
+    function register() {
+        window.location="register.html";
+    }
+</script>
+
+</html>

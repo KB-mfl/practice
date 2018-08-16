@@ -1,0 +1,132 @@
+<!Doctype html>
+<html>
+    <head>
+        <title>贪吃蛇小游戏</title>
+        <link rel="stylesheet" type="text/css" href="snake.css"/>
+    </head>
+
+    <body>
+        <canvas id="mycanvas" width="400" height="400"></canvas>
+        <div class="right_column" id="">
+            <input class="right_column_kid" type="button" id="score_column" value="分数:"/>
+            <div class="show_score" id="show_score">
+
+            </div>
+            <input class="right_column_kid" type="button" id="score_ranking" value="查看排名"/>
+            <input class="right_column_kid" type="button" id="start_game" value="开始"/>
+        </div>
+    </body>
+</html>
+<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+<script>
+    var flag=1;
+        $(document).keydown(function(event){
+            if(event.keyCode == 8){
+                if (flag=1){
+                    flag=0;
+                    $("#start_game").click();
+                }
+            }
+        }) 
+    $("#start_game").click(function(){
+        var canvas = document.getElementById("mycanvas");
+        var context = canvas.getContext('2d');
+        //设置蛇移动的频率
+        var snake_speed = 100;
+        var interval = window.setInterval(snake_leave,snake_speed);//按周期来调取函数
+        //设置移动的方向0-3上下左右
+        var direction = "right";
+        //保存贪吃蛇的实际长度
+        var snakelen = 0;
+        //保存移动的路径,元素为{'x':x,'y':y}格式
+        var map = [];
+        //蛇身单元大小
+        var size = 8;
+        //食物坐标：(a*8,a*8)
+        var a = 0;
+        var b = 0;
+        //贪吃蛇每次的蛇头坐标
+        var x = 8;
+        var y = 8;
+        var score=0;
+        //贪吃蛇移动函数
+        function snake_leave(){
+            //根据移动方向来移动
+            switch(direction){
+                case "up":y -= size;//up
+                    break;
+                case "down":y += size;//down
+                    break;
+                case "left":x -= size;//left
+                    break;
+                case "right":x += size;//right
+                    break;
+            }//x,y保存头坐标
+            //判断是否撞墙
+            if(x > 400 || y > 400 || x < 0 || y < 0){
+                score=snakelen;
+                console.log(score);
+                // console.log(score);
+                alert("game over\n"+"你的分数是"+score+"分")
+                // console.log(sankelen);
+                window.clearInterval(interval);
+            }
+            //判断是否撞到自己
+            for(var i=0; i<map.length; i++){
+                var xx = parseInt(map[i].x);
+                var yy = parseInt(map[i].y);
+                if(xx == x && yy == y){
+                    // console.log(snakelen);
+                    score=snakelen;
+                    console.log(score);
+                    alert("game over\n"+"你的分数是"+score+"分");
+                    alert(snakelen);
+                    // console.log();
+                    window.clearInterval(interval);
+                }
+            }
+            //每次移动一下，蛇身最后都要减去1
+            if(map.length > snakelen){
+                //把数组的第一个元素删除并返回,map中的数据为{key:value}形式
+                var foot = map.shift();
+                context.clearRect(foot['x'],foot['y'],size,size);
+            }
+            //判断是否吃到了食物
+            if(x == a*8 && y == b*8){
+                snakelen++;
+                // console.log(snakelen);
+                // alert(snakelen);
+                snake_food();
+            }
+            //每次移动，进行蛇头的改变
+            map.push({'x':x,'y':y});//向数组末尾添加一个或者多个元素并返回长度
+            context.fillStyle = "#069";
+            context.strokeStyle = "#069";
+            context.fillRect(x,y,size,size);//x,y以坐标的形式存在
+        };
+
+        //添加方向键键盘控制事件
+        document.onkeydown = function(event){
+            var code = event.keyCode;
+            switch(code){
+                case 37:if(direction != "right")  direction = "left";
+                    break;
+                case 38:if(direction != "down")  direction = "up";
+                    break;
+                case 39:if(direction != "left")  direction = "right";
+                    break;
+                case 40:if(direction != "up")  direction = "down";
+                    break;
+            }
+        };
+        //产生食物坐标的随机数来生成食物
+        function snake_food(){
+            a = Math.ceil(Math.random() * 50);
+            b = Math.ceil(Math.random() * 50);
+            context.fillStyle = "red";
+            context.strokeStyle = "red";
+            context.fillRect(a*8,b*8,8,8);
+        };
+        snake_food();
+    });
+</script>

@@ -1,0 +1,83 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册界面</title>
+    <link rel="stylesheet" type="text/css" href="register.css"/>
+</head>
+<body>
+<div class="judge" id="judge">
+
+</div>
+<div id="register_frame">
+    <div class="mun2">欢迎来到贪吃蛇小游戏</div>
+    <form>
+        <p><label class="label_input">用户名</label><input type="text" id="username" class="text_field" placeholder="请输入你的用户名"/></p>
+        <p><label class="label_input">密码</label><input type="text" id="pwd" class="text_field" placeholder="请输入你的密码"/></p>
+        <p><label class="label_input">确认密码</label><input type="text" id="pwd_confirm" class="text_field" placeholder="请再次输入你的密码"/></p>
+
+        <div id="register_control">
+            <input type="button" id="btn_register" value="注册" onclick="register();"/>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+<script>
+    function register() {
+        if ($("#pwd_confirm").val()!=$("#pwd").val()) {
+            var div = document.createElement("div");
+            div.className = '';
+            var element=document.getElementById("judge");
+            element.innerHTML = "";
+            div.innerHTML = "两次输入密码不一致";
+            element.appendChild(div);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "check_register.php",
+                data: {
+                    name: $("#username").val(),
+                    pwd: $("#pwd").val(),
+                    pwd_confirm: $("#pwd_confirm").val(),
+                },
+                dataType:"json",
+                success:function(data) {
+                    if (data=="注册成功") {
+                        document.cookie="name=" + document.getElementById("username").value;
+                        var div = document.createElement("div");
+                        div.className = '';
+                        var element=document.getElementById("judge");
+                        element.innerHTML = "";
+                        div.innerHTML ="&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;注册成功</br>1秒后将以当前账号进入聊天室";
+                        element.appendChild(div);
+                        setTimeout("location.href='./index.html'",1000);
+                        // window.location.href='./login.html';
+                    }
+                    else {
+                        var div = document.createElement("div");
+                        div.className = '';
+                        var element=document.getElementById("judge");
+                        element.innerHTML = "";
+                        div.innerHTML = data;
+                        element.appendChild(div);
+                    }
+                },
+                error:function(jqXHR){
+                    var div = document.createElement("div");
+                    div.className = '';
+                    var element=document.getElementById("judge");
+                    element.innerHTML = "";
+                    // div.innerHTML = jqXHR.status;
+                    console.log(jqXHR.responseText);
+                    div.innerHTML = jqXHR.responseJSON;
+                    element.appendChild(div);
+                },
+            });
+        }
+    }
+</script>
+</html>
